@@ -10,8 +10,14 @@ const {
     uploadUserImage,
     resizeImage
 } = require('../services/userService')
+const {
+    createUserValidator,
+    getUserValidator,
+    updateUserValidator,
+    deleteUserValidator,
+}= require('../utils/validators/userValidator')
 
-router.route('/users').get(getUsers).post(uploadUserImage,resizeImage,createUser);
-router.route('/users/id').get(getUser).put(updateUser).delete(deleteUser)
+router.route('/').get(getUsers).post(createUserValidator,createUser);
+router.route('/:id').get(getUserValidator,getUser).put(updateUserValidator,updateUser).delete(deleteUserValidator,deleteUser)
 
 module.exports = router;
