@@ -8,7 +8,8 @@ const {
     updateUser,
     deleteUser,
     uploadUserImage,
-    resizeImage
+    resizeImage,
+    changeUserPassword
 } = require('../services/userService')
 const {
     createUserValidator,
@@ -19,5 +20,5 @@ const {
 
 router.route('/').get(getUsers).post(createUserValidator,createUser);
 router.route('/:id').get(getUserValidator,getUser).put(updateUserValidator,updateUser).delete(deleteUserValidator,deleteUser)
-
+router.put('/changePassword/:id', changeUserPassword)
 module.exports = router;

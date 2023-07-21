@@ -40,11 +40,37 @@ check('password').notEmpty().withMessage('password is required')
 check("profileImg").optional(),
 check("role").optional(),
 
-check('passwordConfirm').notEmpty().withMessage('confirm passsword is required')
+check('passwordConfirm').notEmpty()
+.withMessage('confirm passsword is required'),
 
   validatorMiddleware,
 ];
 
+exports.changePasswordValidator = [
+  check('id').isMongoId().withMessage('Invalid User id format'),
+
+  check('currentPassword').notEmpty().withMessage('currentPassword is required')
+  
+  .custom(async (val,{req})=>{
+    const user = await User.findById(req.params.id)
+    const isTrue = await bcrypt.compare(val, user.password)
+if(!isTrue){
+  throw new Error('wrong current password')
+
+}
+return true;
+  })
+  ,
+  check('password').notEmpty().withMessage('new password required')
+  .custom((val,{req})=>{
+    if(val !== req.body.confirmPassword){
+      throw new Error('confirm password dont match')
+    }
+    return true;
+  }),
+  check('confirmPassword').notEmpty().withMessage('new password required')
+  ,validatorMiddleware
+]
 exports.updateUserValidator = [
   check('id').isMongoId().withMessage('Invalid User id format'),
   body('name')
