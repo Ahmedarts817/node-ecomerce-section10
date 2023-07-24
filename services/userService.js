@@ -1,13 +1,13 @@
-const asyncHandler = require('express-async-handler');
-const { v4: uuidv4 } = require('uuid');
-const sharp = require('sharp');
-const bcrypt = require('bcryptjs')
-const factory = require('./handlersFactory');
-const { uploadSingleImage } = require('../middlewares/uploadImageMiddleware');
-const User = require('../models/userModel');
+const asyncHandler = require("express-async-handler");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
+const bcrypt = require("bcryptjs");
+const factory = require("./handlersFactory");
+const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const User = require("../models/userModel");
 
 // Upload single image
-exports.uploadUserImage = uploadSingleImage('profileImg');
+exports.uploadUserImage = uploadSingleImage("profileImg");
 
 // Image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
@@ -15,12 +15,12 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 
   await sharp(req.file.buffer)
     .resize(600, 600)
-    .toFormat('jpeg')
+    .toFormat("jpeg")
     .jpeg({ quality: 95 })
     .toFile(`uploads/users/${filename}`);
 
-  // Save image into our db 
-   req.body.profileImg = filename;
+  // Save image into our db
+  req.body.profileImg = filename;
 
   next();
 });
@@ -44,42 +44,44 @@ exports.createUser = factory.createOne(User);
 // @route   PUT /api/v1/users/:id
 // @access  Private
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  const document = await User.findByIdAndUpdate(req.params.id, {
-    name : req.body.name,
-    email :req.body.email,
-    phone : req.body.phone,
-    role: req.body.role,
-    profileImg :req.body.profileImg
-
-  }, {
-    new: true,
-  });
+  const document = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      role: req.body.role,
+      profileImg: req.body.profileImg,
+    },
+    {
+      new: true,
+    }
+  );
 
   if (!document) {
-    return next(
-      new ApiError(`No document for this id ${req.params.id}`, 404)
-    );
+    return next(new ApiError(`No document for this id ${req.params.id}`, 404));
   }
   res.status(200).json({ data: document });
-});;
+});
 // @desc    Update specific brand
 // @route   PUT /api/v1/users/:id
 // @access  Private
 exports.changeUserPassword = asyncHandler(async (req, res, next) => {
-  const document = await User.findByIdAndUpdate(req.params.id, {
-    password : await bcrypt.hash(req.body.password)
-
-  }, {
-    new: true,
-  });
+  const document = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+    },
+    {
+      new: true,
+    }
+  );
 
   if (!document) {
-    return next(
-      new ApiError(`No document for this id ${req.params.id}`, 404)
-    );
+    return next(new ApiError(`No document for this id ${req.params.id}`, 404));
   }
   res.status(200).json({ data: document });
-});;
+});
 
 // @desc    Delete specific brand
 // @route   DELETE /api/v1/users/:id
