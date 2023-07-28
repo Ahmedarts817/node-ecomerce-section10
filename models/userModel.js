@@ -25,6 +25,9 @@ password:{
     minlength:[6, 'too short password'],
     maxlength:[20, 'too long password']
 },
+passwordChangedAt :{
+    type:Date
+},
 role:{
     type:String,
     enum:['user','admin'],

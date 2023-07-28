@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 
 
 
-exports.signUpValidator = [
+exports.signupValidator = [
   check("name")
     .notEmpty()
     .withMessage("User required")
@@ -45,6 +45,24 @@ exports.signUpValidator = [
   check("passwordConfirm")
     .notEmpty()
     .withMessage("confirm passsword is required"),
+
+  validatorMiddleware,
+];
+
+exports.signinValidator = [
+
+  body("email")
+    .notEmpty()
+    .withMessage("email required")
+    .isEmail()
+    .withMessage("invalid email format"),
+    
+  body("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 6 })
+    .withMessage("password must be at least 6 characters")
+    ,
 
   validatorMiddleware,
 ];
