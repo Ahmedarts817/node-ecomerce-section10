@@ -3,11 +3,11 @@ const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const createToken = require("../utils/createToken");
-const crypto = require("crypto");
+const crypto = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
 //@des   signup
-//@route /api/v2/auth/login
+//@route post /api/v1/auth/login
 //@access  public
 exports.sigup = asyncHandler(async (req, res, next) => {
   //create new user
@@ -21,7 +21,7 @@ exports.sigup = asyncHandler(async (req, res, next) => {
   res.status(200).send({ data: user, token });
 });
 //@des   login
-//@route /api/v2/auth/login
+//@route post /api/v2/auth/login
 //@access  public
 
 exports.signin = asyncHandler(async (req, res, next) => {
@@ -89,25 +89,22 @@ exports.allowedTo = (...roles) =>
     next();
   });
 
-//@ des forget password
-//@ route api/v1/auth/forgetPassword
-//@ access public
+//@desc forget password
+//@route post /api/v1/auth/forgetPassword
+//@access public
 
 exports.forgetPassword = asyncHandler(async (req, res, next) => {
   //1) get user by Email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(
-      new ApiError(`no user with this email ${req.bbody.email} `, 404)
+      new ApiError(`no user with this email ${req.body.email} `, 404)
     );
   }
 
   //2) if user exists generate hash random 6 digit code and save it to db
   const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-  const hashedResetCode = crypto
-    .createHash(sha256)
-    .update(resetCode)
-    .digest(hex);
+  const hashedResetCode = crypto.SHA256(resetCode);
   // save hashed password into db
   user.passwordResetCode = hashedResetCode;
   user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
@@ -126,7 +123,7 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     user.passwordResetExpires = undefined;
     user.passwordResetVerify = undefined;
     await user.save();
-    return next(new Apierror("there is an error while sending emial", 500));
+    return next(new ApiError("there is an error while sending emial", 500));
   }
 
   res.status(200).json({
