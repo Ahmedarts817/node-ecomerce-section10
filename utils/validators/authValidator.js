@@ -2,7 +2,6 @@ const slugify = require("slugify");
 const { check, body } = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/userModel");
-const bcrypt = require("bcryptjs");
 
 
 
@@ -31,20 +30,21 @@ exports.signupValidator = [
           }
         })
     ),
-  body("password")
+  check("password")
     .notEmpty()
-    .withMessage("password is required")
+    .withMessage("password is too required")
     .isLength({ min: 6 })
     .withMessage("password must be at least 6 characters")
+    ,
+  check("passwordConfirm")
+    .notEmpty()
+    .withMessage("confirm passsword is required")
     .custom((val, { req }) => {
-      if (val !== req.body.passwordConfirm) {
+      if (val !== req.body.password) {
         throw new Error("password must mathch confirmation password");
       }
       return true;
     }),
-  check("passwordConfirm")
-    .notEmpty()
-    .withMessage("confirm passsword is required"),
 
   validatorMiddleware,
 ];

@@ -1,13 +1,13 @@
-const sharp = require('sharp');
-const { v4: uuidv4 } = require('uuid');
-const asyncHandler = require('express-async-handler');
+const sharp = require("sharp");
+const { v4: uuidv4 } = require("uuid");
+const asyncHandler = require("express-async-handler");
 
-const factory = require('./handlersFactory');
-const { uploadSingleImage } = require('../middlewares/uploadImageMiddleware');
-const Category = require('../models/categoryModel');
+const factory = require("./handlersFactory");
+const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const Category = require("../models/categoryModel");
 
 // Upload single image
-exports.uploadCategoryImage = uploadSingleImage('image');
+exports.uploadCategoryImage = uploadSingleImage("image");
 
 // Image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
@@ -15,7 +15,7 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 
   await sharp(req.file.buffer)
     .resize(600, 600)
-    .toFormat('jpeg')
+    .toFormat("jpeg")
     .jpeg({ quality: 95 })
     .toFile(`uploads/categories/${filename}`);
 

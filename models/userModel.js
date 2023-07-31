@@ -21,7 +21,7 @@ phone:String,
 profileImg:String,
 password:{
     type:String,
-    required:[true, 'passwored is required'],
+    required:[true, 'passwored is 1 required'],
     minlength:[6, 'too short password'],
     maxlength:[20, 'too long password']
 },
