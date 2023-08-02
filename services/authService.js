@@ -28,12 +28,12 @@ exports.signin = asyncHandler(async (req, res, next) => {
   //  verify that user with email exists
   const user = await User.findOne({ email: req.body.email });
   // verify password
-  const truePassword = await bcrypt.compare(req.body.password, user.password);
-  if (!user || !truePassword) {
+  if (!user || !await bcrypt.compare(req.body.password,
+    user.password)) {
     return next(new ApiError("Email or password is incorrect", 401));
   }
   // delete password from response
-  delete user._doc.password;
+  // delete user._doc.password;
   // create token
   const token = createToken(user._id);
   res.status(200).json({ data: user, token });
@@ -123,7 +123,7 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     user.passwordResetExpires = undefined;
     user.passwordResetVerify = undefined;
     await user.save();
-    return next(new ApiError("there is an error while sending emial", 500));
+    return next(new ApiError("there is an error while sending email", 500));
   }
 
   res.status(200).json({
@@ -131,3 +131,46 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     message: "reset code sent successfuly",
   });
 });
+
+
+// @desc verify reset password reset code 
+// @route /api/va/auth/verifyResetCode
+// @access public
+exports.verifyResetCode = asyncHandler(async(req,res,next)=>{
+  //1) get user based on reset code
+  const hashedCode = crypto.SHA256(resetCode);
+const user = await User.findOne({hashedResetCode:hashedCode,
+  passwordResetExpires:{$gt:Date.now()}
+})
+if(!user){
+  return next(new ApiError('invalid or expired reset code'))
+}
+//2) reset code valid
+user.passwordResetVerify = true
+await user.save();
+res.status(200).json({status:'sucess'})
+
+})
+
+//@ desc reset password
+//@route /api/v1/auth/resetPassword
+//@access public
+exports.resetPassword = asyncHandler(async(req,res,next)=>{
+ //1)get user based on email
+ const user = await User.findOne({email: req.body.email})
+ if(!user){
+  return next(new ApiError(`no user with this email ${req.body.email}`,404))
+ }
+//2) check reset code if verified
+ if(!user.passwordResetVerify){
+  return next(new ApiError(`rest code not verified`,404))
+ }
+ user.password = req.body.newPassord
+ user.passwordResetCode =undefined
+ user.passwordResetExpires =undefined
+ user.passwordResetVerify =undefined
+ user.passwordChangedAt = Date.now()
+ // if everything is ok generate token
+ let token = createToken(user._id)
+ res.status(200).json({status:'success', token})
+})
