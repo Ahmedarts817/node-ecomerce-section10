@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { sigup, signin, forgetPassword, verifyResetCode, resetPassword } = require("../services/authService");
+const {
+  sigup,
+  signin,
+  forgetPassword,
+  verifyResetCode,
+  resetPassword,
+} = require("../services/authService");
 const {
   signupValidator,
   signinValidator,
