@@ -30,7 +30,7 @@ const reviewSchema = new mongoose.Schema(
 );
 
 // populate user's name
-reviweSchema.pre(/^find/, function (next) {
+reviewSchema.pre(/^find/, function (next) {
   this.populate({ path: "user", select: "name" });
   next();
 });
@@ -66,10 +66,10 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
     });
   }
 };
-revieSchema.post("save", async function () {
+reviewSchema.post("save", async function () {
   await this.constructor.calcAverageRatingsAndQuantity(this.product);
 });
-revieSchema.post("remove", async function () {
+reviewSchema.post("remove", async function () {
   await this.constructor.calcAverageRatingsAndQuantity(this.product);
 });
 
