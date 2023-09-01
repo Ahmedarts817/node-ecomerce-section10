@@ -16,7 +16,7 @@ const cartSchema = new mongoose.Schema(
         price: Number,
       },
     ],
-    totalCartPrice: String,
+    totalCartPrice: Number,
     totalPriceAfterDiscount: Number,
     user: {
       type: mongoose.Schema.ObjectId,
@@ -25,5 +25,13 @@ const cartSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// populate user's name
+cartSchema.pre(/^find/, function (next) {
+  this.populate({ path: "user", select: "name" }).populate({
+    path: "cartItems.product",
+    select: "title",
+  });
+  next();
+});
 
 module.exports = mongoose.model("Cart", cartSchema);

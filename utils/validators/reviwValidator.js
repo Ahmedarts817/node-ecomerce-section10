@@ -5,7 +5,7 @@ const Review = require("../../models/reviewModel");
 exports.createReviewValidator = [
   body("title").notEmpty().withMessage("review title is required"),
   body("description").notEmpty().withMessage("review description is required"),
-  body("rating")
+  body("ratings")
     .isFloat({ min: 1, max: 5 })
     .withMessage("rating must be between 1 and 5"),
 
@@ -37,17 +37,19 @@ exports.updateReviewValidator = [
   check("id")
     .isMongoId()
     .withMessage("invalid mongo id ")
-    .custom((val, { req }) => {
+    .custom((val, { req }) =>
       //check review ownership before update
       Review.findById(val).then((review) => {
-        if (!review)
+        if (!review) {
           return Promise.reject(new Error("no review with this review id"));
-        if (review.user._id.toString() !== req.user._id.toString)
+        }
+        if (review.user._id.toString() !== req.user._id.toString()) {
           return Promise.reject(
-            new Error("you are not allowed tp perform this action")
+            new Error(`you are not allowed to perform this action`)
           );
-      });
-    }),
+        }
+      })
+    ),
 
   validationMiddleware,
 ];

@@ -28,6 +28,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "sharp": "^0.29.3",
     "slugify": "^1.6.3",
+    "stripe": "^13.3.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

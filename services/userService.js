@@ -30,17 +30,17 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 // @access  private
 exports.getUsers = factory.getAll(User);
 
-// @desc    Get specific brand by id
+// @desc    Get specific user by id
 // @route   GET /api/v1/users/:id
 // @access  private
 exports.getUser = factory.getOne(User);
 
-// @desc    Create brand
+// @desc    Create user
 // @route   POST  /api/v1/users
 // @access  private
 exports.createUser = factory.createOne(User);
 
-// @desc    Update specific brand
+// @desc    Update specific user
 // @route   PUT /api/v1/users/:id
 // @access  Private
 exports.updateUser = asyncHandler(async (req, res, next) => {
@@ -63,7 +63,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({ data: document });
 });
-// @desc    Update specific brand
+// @desc    Update specific user
 // @route   PUT /api/v1/users/:id
 // @access  Private
 exports.changeUserPassword = asyncHandler(async (req, res, next) => {
@@ -71,7 +71,7 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
     req.params.id,
     {
       password: await bcrypt.hash(req.body.password, 12),
-      passwordChangedAt:Date.now(),
+      passwordChangedAt: Date.now(),
     },
     {
       new: true,
@@ -84,7 +84,7 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: document });
 });
 
-// @desc    Delete specific brand
+// @desc    Delete specific user
 // @route   DELETE /api/v1/users/:id
 // @access  Private
 exports.deleteUser = factory.deleteOne(User);

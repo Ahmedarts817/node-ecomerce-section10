@@ -1,0 +1,48 @@
+ ///////// create user//////////
+{
+    "name": "ahmed",
+    "email":"ahmed@g.com",
+    "phone": "012345678910",
+    "profileImg": "ff",
+    "role":"admin",
+    "password": "123456",
+    "passwordConfirm":"123456"
+  }
+{
+    "name": "mohamed ",
+    "email":"mohamed@g.com",
+    "phone": "011345678910",
+    "profileImg": "ff",
+    "role":"user",
+    "password": "123456",
+    "passwordConfirm":"123456"
+  }
+
+ ///////// signup//////////
+ {
+    "name": "",
+    "email":"",
+    "password": "",
+    "passwordConfirm":""
+  }
+
+   ///////// signin//////////
+ {
+    "email":"",
+    "password": ""
+  }
+
+   ///////// create coupon//////////
+ {
+    "name": "",
+    "expire":"",
+    "discount": ""
+  }
+///////////create review/////////
+{
+    "title": "",
+    "description":"",
+    "rating": "",
+    "product": "",
+    "user": ""
+  }

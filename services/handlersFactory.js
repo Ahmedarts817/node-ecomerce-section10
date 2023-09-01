@@ -1,6 +1,6 @@
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
-const ApiFeatures = require('../utils/apiFeatures');
+const asyncHandler = require("express-async-handler");
+const ApiError = require("../utils/apiError");
+const ApiFeatures = require("../utils/apiFeatures");
 
 exports.deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
@@ -10,7 +10,7 @@ exports.deleteOne = (Model) =>
     if (!document) {
       return next(new ApiError(`No document for this id ${id}`, 404));
     }
-    res.status(204).send();
+    res.status(204).json({ status: "success" });
   });
 
 exports.updateOne = (Model) =>
@@ -43,7 +43,7 @@ exports.getOne = (Model) =>
     res.status(200).json({ data: document });
   });
 
-exports.getAll = (Model, modelName = '') =>
+exports.getAll = (Model, modelName = "") =>
   asyncHandler(async (req, res) => {
     let filter = {};
     if (req.filterObj) {

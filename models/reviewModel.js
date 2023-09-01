@@ -5,42 +5,39 @@ const reviewSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "title of revew is required"],
     },
-    description: {
-      type: String,
-      required: [true, "description of review is required"],
-    },
-    rating: {
+    ratings: {
       type: Number,
+      min: [1, "rating must be at least 1.0"],
+      max: [5, "rating must be less than o r equal 5.0"],
       required: [true, "rating is required"],
-      length: [{ min: 1.0 }, "rating must be at least 1.0"],
-      length: [{ max: 5.0 }, "rating must be less than o r equal 5.0"],
-    },
-    product: {
-      type: mongoose.SchemaTypes.ObjectId,
-      required: [true, "review must refer to a product"],
     },
     user: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: [true, "rating must be owned by user"],
+      ref: "User",
+      required: [true, "review must be owned by user"],
+    },
+    // parent refernce (one to many)
+    product: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Product",
+      required: [true, "review must refer to a product"],
     },
   },
   { timestamps: true }
 );
-
 // populate user's name
 reviewSchema.pre(/^find/, function (next) {
   this.populate({ path: "user", select: "name" });
   next();
 });
-
 //calculating the average of rating of the product
+
 reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
   productId
 ) {
   const result = await this.aggregate([
-    //stage 1 get all reviewsof the same product
+    //stage 1 get all reviews of the same product
     {
       $match: { product: productId },
     },
@@ -48,12 +45,12 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
     {
       $group: {
         _id: "product",
-        averageRating: { $avg: $ratings },
+        avgRatings: { $avg: "$ratings" },
         ratingsQuantity: { $sum: 1 },
       },
     },
   ]);
-  // console.log(result)
+  console.log(result);
   if (result.length > 0) {
     await Product.findByIdAndUpdate(productId, {
       ratingsAverage: result[0].avgRatings,

@@ -3,8 +3,6 @@ const { check, body } = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/userModel");
 
-
-
 exports.signupValidator = [
   check("name")
     .notEmpty()
@@ -34,8 +32,7 @@ exports.signupValidator = [
     .notEmpty()
     .withMessage("password is too required")
     .isLength({ min: 6 })
-    .withMessage("password must be at least 6 characters")
-    ,
+    .withMessage("password must be at least 6 characters"),
   check("passwordConfirm")
     .notEmpty()
     .withMessage("confirm passsword is required")
@@ -50,20 +47,16 @@ exports.signupValidator = [
 ];
 
 exports.signinValidator = [
-
   body("email")
     .notEmpty()
     .withMessage("email required")
     .isEmail()
     .withMessage("invalid email format"),
-    
+
   body("password")
     .notEmpty()
     .withMessage("password is required")
     .isLength({ min: 6 })
-    .withMessage("password must be at least 6 characters")
-    ,
-
+    .withMessage("password must be at least 6 characters"),
   validatorMiddleware,
 ];
-
