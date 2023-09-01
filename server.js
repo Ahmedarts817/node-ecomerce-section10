@@ -4,7 +4,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
-const cors = require("cors");
 const compression = require("compression");
 
 dotenv.config({ path: "config.env" });
