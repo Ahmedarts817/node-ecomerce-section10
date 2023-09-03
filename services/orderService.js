@@ -206,6 +206,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
 // @access Protected/User
 exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   const sig = req.headers["stripe-signature"];
+
   let event;
 
   try {
@@ -217,7 +218,7 @@ exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   } catch (err) {
     return res.status(400).send(`Webhook Error :${err.message}`);
   }
-  if (event.type === "checkout.session.comleted") {
+  if (event.type === "checkout.session.completed") {
     //craete order
     createCardOrder(event.data.object);
   }
