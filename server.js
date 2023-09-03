@@ -51,7 +51,11 @@ app.use("/api/v1/reviews", reviewRoute);
 app.use("/api/v1/coupons", couponRoute);
 app.use("/api/v1/cart", cartRoute);
 app.use("/api/v1/orders", orderRoute);
-app.post("/checkout-webhook", orderService.webhookCheckout);
+app.post(
+  "/checkout-webhook",
+  express.raw({ type: "application/json" }),
+  orderService.webhookCheckout
+);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));

@@ -167,39 +167,39 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: session });
 });
 
-const createCardOrder = async (session) => {
-  const cartId = session.client_refernce_id;
-  const shippingAddress = session.metadata;
-  const orderPrice = session.amount_total / 100;
+// const createCardOrder = async (session) => {
+//   const cartId = session.client_refernce_id;
+//   const shippingAddress = session.metadata;
+//   const orderPrice = session.amount_total / 100;
 
-  const cart = Cart.findById(cartId);
-  const user = await User.findOne({ email: session.customer_email });
+//   const cart = Cart.findById(cartId);
+//   const user = await User.findOne({ email: session.customer_email });
 
-  // 3) create order with default paymentMethodType  card
-  const order = await Order.create({
-    user: user._id,
-    cartItems: cart.cartItems,
-    shippingAddress,
-    totalOrderPrice: orderPrice,
-    isPaid: true,
-    paidAt: Date.now(),
-    paymentMethodType: "card",
-  });
+//   // 3) create order with default paymentMethodType  card
+//   const order = await Order.create({
+//     user: user._id,
+//     cartItems: cart.cartItems,
+//     shippingAddress,
+//     totalOrderPrice: orderPrice,
+//     isPaid: true,
+//     paidAt: Date.now(),
+//     paymentMethodType: "card",
+//   });
 
-  // 4) After creating order, decrement product quantity, increment product sold
-  if (order) {
-    const bulkOption = cart.cartItems.map((item) => ({
-      updateOne: {
-        filter: { _id: item.product },
-        update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
-      },
-    }));
-    await Product.bulkWrite(bulkOption, {});
+//   // 4) After creating order, decrement product quantity, increment product sold
+//   if (order) {
+//     const bulkOption = cart.cartItems.map((item) => ({
+//       updateOne: {
+//         filter: { _id: item.product },
+//         update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
+//       },
+//     }));
+//     await Product.bulkWrite(bulkOption, {});
 
-    // 5) Clear cart depend on cartId
-    await Cart.findByIdAndDelete(cartId);
-  }
-};
+//     // 5) Clear cart depend on cartId
+//     await Cart.findByIdAndDelete(cartId);
+//   }
+// };
 
 // @desc this hook will run when stripe payment successfuly
 // @route post /webhook_checkout
