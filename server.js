@@ -21,6 +21,7 @@ const reviewRoute = require("./routes/reviewRoute");
 const couponRoute = require("./routes/couponRoute");
 const cartRoute = require("./routes/cartRoute");
 const orderRoute = require("./routes/orderRoute");
+const webhookCheckout = require("./services/orderService");
 // Connect with db
 dbConnection();
 
@@ -50,6 +51,7 @@ app.use("/api/v1/reviews", reviewRoute);
 app.use("/api/v1/coupons", couponRoute);
 app.use("/api/v1/cart", cartRoute);
 app.use("/api/v1/orders", orderRoute);
+app.post("/checkout-webhook", webhookCheckout);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
