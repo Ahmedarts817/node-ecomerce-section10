@@ -52,7 +52,7 @@ app.use("/api/v1/coupons", couponRoute);
 app.use("/api/v1/cart", cartRoute);
 app.use("/api/v1/orders", orderRoute);
 app.post(
-  "/webhook-checkout",
+  "/checkout-webhook",
   express.raw({ type: "application/json" }),
   webhookCheckout
 );
