@@ -7,7 +7,7 @@ const cors = require("cors");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
-const mongoSanitaize = require("express-mongo-sanitaize");
+const mongoSanitaize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 
 dotenv.config({ path: "config.env" });
