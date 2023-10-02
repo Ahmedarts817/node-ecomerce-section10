@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 
-const { uploadMixOfImages } = require('../middlewares/uploadImageMiddleware');
+const { uploadMixOfImages } = require('../middlewares/uploadImageMiddleware')
 const factory = require('./handlersFactory');
 const Product = require('../models/productModel');
 
@@ -50,8 +50,9 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
       })
     );
 
-    next();
+  
   }
+  next();
 });
 
 // @desc    Get list of products
@@ -62,7 +63,7 @@ exports.getProducts = factory.getAll(Product, 'Products');
 // @desc    Get specific product by id
 // @route   GET /api/v1/products/:id
 // @access  Public
-exports.getProduct = factory.getOne(Product);
+exports.getProduct = factory.getOne(Product,'reviews');
 
 // @desc    Create product
 // @route   POST  /api/v1/products

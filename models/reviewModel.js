@@ -63,6 +63,10 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
     });
   }
 };
+
+
+
+
 reviewSchema.post("save", async function () {
   await this.constructor.calcAverageRatingsAndQuantity(this.product);
 });

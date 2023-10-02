@@ -10,6 +10,8 @@ exports.deleteOne = (Model) =>
     if (!document) {
       return next(new ApiError(`No document for this id ${id}`, 404));
     }
+        //to trigger document
+        await document.remove()
     res.status(204).json({ status: "success" });
   });
 
@@ -24,6 +26,8 @@ exports.updateOne = (Model) =>
         new ApiError(`No document for this id ${req.params.id}`, 404)
       );
     }
+    //to trigger document
+    await document.save()
     res.status(200).json({ data: document });
   });
 
@@ -33,10 +37,10 @@ exports.createOne = (Model) =>
     res.status(201).json({ data: newDoc });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model,populateOptions) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const document = await Model.findById(id);
+    const document = await Model.findById(id).populate(populateOptions);
     if (!document) {
       return next(new ApiError(`No document for this id ${id}`, 404));
     }

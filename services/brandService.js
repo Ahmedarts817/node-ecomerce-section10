@@ -12,15 +12,15 @@ exports.uploadBrandImage = uploadSingleImage('image');
 // Image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   const filename = `brand-${uuidv4()}-${Date.now()}.jpeg`;
-
-  await sharp(req.file.buffer)
+if(req.body.image){
+    await sharp(req.file.buffer)
     .resize(600, 600)
     .toFormat('jpeg')
     .jpeg({ quality: 95 })
     .toFile(`uploads/brands/${filename}`);
 
   // Save image into our db 
-   req.body.image = filename;
+   req.body.image = filename;}
 
   next();
 });

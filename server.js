@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path')
 
 const express = require("express");
 const dotenv = require("dotenv");
@@ -38,8 +38,8 @@ app.post(
   express.raw({ type: "application/json" }),
   webhookCheckout
 );
-app.use(express.json({ limit: "20k" }));
-app.use(express.static(path.join(__dirname, "uploads")));
+app.use(express.json({ limit: "500k" }));
+app.use(express.static(path.join(__dirname,'uploads')))
 app.use(cors());
 app.options("*", cors());
 app.use(compression());

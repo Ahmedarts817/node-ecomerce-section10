@@ -16,14 +16,17 @@ const {
   resizeProductImages,
 } = require('../services/productService');
 
+const reviewRoute = require('./reviewRoute')
 const router = express.Router();
+//nested route
+router.use('/:productId/reviews',reviewRoute)
 
 router
   .route('/')
   .get(getProducts)
   .post(
-    uploadProductImages,
-    resizeProductImages,
+uploadProductImages,
+resizeProductImages,
     createProductValidator,
     createProduct
   );

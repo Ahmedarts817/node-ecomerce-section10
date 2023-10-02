@@ -132,6 +132,8 @@ exports.updateProductValidator = [
       req.body.slug = slugify(val);
       return true;
     }),
+    check('imageCover')
+    .optional(),
   validatorMiddleware,
 ];
 
