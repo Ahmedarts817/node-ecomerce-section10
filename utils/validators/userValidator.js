@@ -124,3 +124,38 @@ exports.deleteUserValidator = [
   check("id").isMongoId().withMessage("Invalid User id format"),
   validatorMiddleware,
 ];
+
+//User
+exports.updateLoggedUserDataValidator = [
+  body("name")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  check("name")
+    .notEmpty()
+    .withMessage("User required")
+    .isLength({ min: 3 })
+    .withMessage("Too short User name")
+    .isLength({ max: 32 })
+    .withMessage("Too long User name")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  body("email")
+    .notEmpty()
+    .withMessage("email required")
+    .isEmail()
+    .withMessage("invalid email format")
+    .custom(
+      async (val) =>
+        await User.findOne({ email: val }).then((user) => {
+          if (user) {
+            return Promise.reject(new Error("email already exists"));
+          }
+        })
+    ),
+  validatorMiddleware,
+];

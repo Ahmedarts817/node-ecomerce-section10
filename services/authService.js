@@ -76,7 +76,7 @@ exports.protected = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Authorization (User Permissions)
-//["admin","ma,ager"]
+//["admin","manager"]
 exports.allowedTo = (...roles) =>
   asyncHandler(async (req, res, next) => {
     // 1) access roles
@@ -170,6 +170,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   user.passwordResetVerify = undefined;
   user.passwordChangedAt = Date.now();
+  await user.save();
   // if everything is ok generate token
   let token = createToken(user._id);
   res.status(200).json({ status: "success", token });

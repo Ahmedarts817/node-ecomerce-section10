@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require("path");
 
 const express = require("express");
 const dotenv = require("dotenv");
@@ -25,6 +25,8 @@ const reviewRoute = require("./routes/reviewRoute");
 const couponRoute = require("./routes/couponRoute");
 const cartRoute = require("./routes/cartRoute");
 const orderRoute = require("./routes/orderRoute");
+const wishlistRoute = require("./routes/wishlistRoute");
+const addressesRoute = require("./routes/addressesRoute");
 const { webhookCheckout } = require("./services/orderService");
 // Connect with db
 dbConnection();
@@ -39,7 +41,7 @@ app.post(
   webhookCheckout
 );
 app.use(express.json({ limit: "500k" }));
-app.use(express.static(path.join(__dirname,'uploads')))
+app.use(express.static(path.join(__dirname, "uploads")));
 app.use(cors());
 app.options("*", cors());
 app.use(compression());
@@ -86,6 +88,8 @@ app.use("/api/v1/reviews", reviewRoute);
 app.use("/api/v1/coupons", couponRoute);
 app.use("/api/v1/cart", cartRoute);
 app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/wishlist", wishlistRoute);
+app.use("/api/v1/addresses", addressesRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));

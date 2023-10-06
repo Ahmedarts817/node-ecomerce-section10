@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 const {
   getProductValidator,
   createProductValidator,
   updateProductValidator,
   deleteProductValidator,
-} = require('../utils/validators/productValidator');
+} = require("../utils/validators/productValidator");
 
 const {
   getProducts,
@@ -14,31 +14,41 @@ const {
   deleteProduct,
   uploadProductImages,
   resizeProductImages,
-} = require('../services/productService');
+} = require("../services/productService");
+const authService = require("../services/authService");
 
-const reviewRoute = require('./reviewRoute')
+const reviewRoute = require("./reviewRoute");
 const router = express.Router();
 //nested route
-router.use('/:productId/reviews',reviewRoute)
+router.use("/:productId/reviews", reviewRoute);
 
 router
-  .route('/')
+  .route("/")
   .get(getProducts)
   .post(
-uploadProductImages,
-resizeProductImages,
+    authService.protected,
+    authService.allowedTo("admin", "manager"),
+    uploadProductImages,
+    resizeProductImages,
     createProductValidator,
     createProduct
   );
 router
-  .route('/:id')
+  .route("/:id")
   .get(getProductValidator, getProduct)
   .put(
+    authService.protected,
+    authService.allowedTo("admin", "manager"),
     uploadProductImages,
     resizeProductImages,
     updateProductValidator,
     updateProduct
   )
-  .delete(deleteProductValidator, deleteProduct);
+  .delete(
+    authService.protected,
+    authService.allowedTo("admin"),
+    deleteProductValidator,
+    deleteProduct
+  );
 
 module.exports = router;
