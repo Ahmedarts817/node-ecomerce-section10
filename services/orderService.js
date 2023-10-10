@@ -25,8 +25,8 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
   }
 
   // 2) get order price depend on cart price "check if coupon applied"
-  const cartPrice = cart.totalpriceAfterDiscount
-    ? cart.totalpriceAfterDiscount
+  const cartPrice = cart.totalPriceAfterDiscount
+    ? cart.totalPriceAfterDiscount
     : cart.totalCartPrice;
 
   const totalOrderPrice = cartPrice + taxPrice + shippingPrice;

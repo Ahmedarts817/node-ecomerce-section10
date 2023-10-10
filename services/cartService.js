@@ -31,9 +31,9 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
       cartItems: [{ product: productId, color, price: product.price }],
     });
   } else {
-    //product exists in cart > update product quantity
+    // //product exists in cart > update product quantity
     const productIndex = cart.cartItems.findIndex(
-      (item) => item.product.toString() === productId && item.color === color
+      (item) => item.product.id.toString() === productId && item.color === color
     );
     console.log(productIndex);
     if (productIndex > -1) {
@@ -134,7 +134,7 @@ exports.applyCoupon = asyncHandler(async (req, res, next) => {
   //1)get coupon based on coupo name
   const coupon = await Coupon.findOne({
     name: req.body.coupon,
-    expire: { $gt: Date.now() },
+    // expire: { $gt: Date.now() },
   });
   if (!coupon) {
     return next(new ApiError("coupon is invalid or expired"));
