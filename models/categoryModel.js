@@ -25,7 +25,7 @@ const setImageURL = (doc) => {
     doc.image = imageUrl;
   }
 };
-// findOne, findAll and update
+//findOne, findAll and update
 categorySchema.post("init", (doc) => {
   setImageURL(doc);
 });

@@ -10,8 +10,8 @@ exports.deleteOne = (Model) =>
     if (!document) {
       return next(new ApiError(`No document for this id ${id}`, 404));
     }
-        //to trigger document
-        await document.remove()
+        //to trigger"remove" event when update document
+      document.remove()
     res.status(204).json({ status: "success" });
   });
 
@@ -26,13 +26,14 @@ exports.updateOne = (Model) =>
         new ApiError(`No document for this id ${req.params.id}`, 404)
       );
     }
-    //to trigger document
-    await document.save()
+    //to trigger "save" event when update document
+     // document.save()
     res.status(200).json({ data: document });
   });
 
 exports.createOne = (Model) =>
   asyncHandler(async (req, res) => {
+    console.log(req.body)
     const newDoc = await Model.create(req.body);
     res.status(201).json({ data: newDoc });
   });

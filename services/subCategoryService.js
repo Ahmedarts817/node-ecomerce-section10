@@ -24,7 +24,7 @@ exports.getSubCategories = factory.getAll(SubCategory);
 // @desc    Get specific subcategory by id
 // @route   GET /api/v1/subcategories/:id
 // @access  Public
-exports.getSubCategory = factory.getOne(SubCategory);
+exports.getSubCategory = factory.getOne(SubCategory,{path:'category',select:'name -_id'});
 
 // @desc    Create subCategory
 // @route   POST  /api/v1/subcategories
