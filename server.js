@@ -40,7 +40,7 @@ app.use(compression());
 // middeleware to limit each ip for 100 requsts per window (per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
 });

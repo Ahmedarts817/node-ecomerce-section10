@@ -134,7 +134,7 @@ exports.applyCoupon = asyncHandler(async (req, res, next) => {
   //1)get coupon based on coupo name
   const coupon = await Coupon.findOne({
     name: req.body.coupon,
-    // expire: { $gt: Date.now() },
+    expire: { $gt: Date.now() },
   });
   if (!coupon) {
     return next(new ApiError("coupon is invalid or expired"));
