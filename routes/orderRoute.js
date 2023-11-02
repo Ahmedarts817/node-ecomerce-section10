@@ -9,6 +9,7 @@ const {
   updateOrderToPaid,
   updateOrderToDelivered,
   checkoutSession,
+  filterOrderForLoggedUser
 } = require("../services/orderService");
 router.use(authService.protected);
 router.get(
@@ -19,7 +20,7 @@ router.get(
 router.route("/:cartId").post(authService.allowedTo("user"), createCashOrder);
 router
   .route("/")
-  .get(authService.allowedTo("user", "admin", "manager"), findAllOrders);
+  .get(authService.allowedTo("user", "admin", "manager"), filterOrderForLoggedUser,findAllOrders);
 router
   .route("/:id/pay")
   .get(authService.allowedTo("admin", "manager"), findSpecificOrder);
