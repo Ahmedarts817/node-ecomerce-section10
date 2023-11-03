@@ -9,6 +9,7 @@ const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const mongoSanitaize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const history = require("connect-history-api-fallback");
 
 dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError");
@@ -33,6 +34,12 @@ app.post(
 );
 app.use(express.json({ limit: "500k" }));
 app.use(express.static(path.join(__dirname, "uploads")));
+//vue
+app.use(
+  express.static(path.resolve(__dirname, "dist"), { maxAge: "1y", etag: false })
+);
+app.use(history());
+//
 app.use(cors());
 app.options("*", cors());
 app.use(compression());
@@ -71,6 +78,11 @@ if (process.env.NODE_ENV === "development") {
 // Mount Routes
 mountRoutes(app);
 
+//vue
+app.get("*", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "dist/index.html"));
+});
+//
 app.all("*", (req, res, next) => {
   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
 });
