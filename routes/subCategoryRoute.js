@@ -18,7 +18,7 @@ const {
 const authService = require("../services/authService");
 
 // mergeParams: Allow us to access parameters on other routers
-// ex: We need to access categoryId from category router
+// ex: We need to access subCategoryId from category router
 const router = express.Router({ mergeParams: true });
 
 router

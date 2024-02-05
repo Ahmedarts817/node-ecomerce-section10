@@ -18,11 +18,13 @@ const {
 } = require("../services/categoryService");
 
 const subcategoriesRoute = require("./subCategoryRoute");
+const productRoute = require("./productRoute");
 const authService = require("../services/authService");
 
 const router = express.Router();
 
 router.use("/:categoryId/subcategories", subcategoriesRoute);
+router.use("/:categoryId/products", productRoute);
 
 router
   .route("/")

@@ -14,17 +14,20 @@ const {
   deleteProduct,
   uploadProductImages,
   resizeProductImages,
+  createFilterObj,
 } = require("../services/productService");
 const authService = require("../services/authService");
 
+// mergeParams: Allow us to access parameters on other routers
+// ex: We need to access subCategoryId from category router
+const router = express.Router({ mergeParams: true });
 const reviewRoute = require("./reviewRoute");
-const router = express.Router();
 //nested route
 router.use("/:productId/reviews", reviewRoute);
 
 router
   .route("/")
-  .get(getProducts)
+  .get(createFilterObj, getProducts)
   .post(
     authService.protected,
     authService.allowedTo("admin", "manager"),

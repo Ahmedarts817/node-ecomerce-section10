@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 // 1- Create Schema
 const brandSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Brand required'],
-      unique: [true, 'Brand must be unique'],
-      minlength: [3, 'Too short Brand name'],
-      maxlength: [32, 'Too long Brand name'],
+      required: [true, "Brand required"],
+      unique: [true, "Brand must be unique"],
+      minlength: [2, "Too short Brand name"],
+      maxlength: [32, "Too long Brand name"],
     },
     slug: {
       type: String,
@@ -25,13 +25,13 @@ const setImageURL = (doc) => {
   }
 };
 // findOne, findAll and update
-brandSchema.post('init', (doc) => {
+brandSchema.post("init", (doc) => {
   setImageURL(doc);
 });
 
 // create
-brandSchema.post('save', (doc) => {
+brandSchema.post("save", (doc) => {
   setImageURL(doc);
 });
 // 2- Create model
-module.exports = mongoose.model('Brand', brandSchema);
+module.exports = mongoose.model("Brand", brandSchema);
